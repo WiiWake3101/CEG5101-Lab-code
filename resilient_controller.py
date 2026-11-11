@@ -7,7 +7,7 @@ from ryu.topology import event
 from ryu.topology.api import get_switch, get_link
 import heapq
 import time
-import threading
+from ryu.lib import hub
 
 class Assignment2Controller(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -22,7 +22,7 @@ class Assignment2Controller(app_manager.RyuApp):
         self.host_ports = {}
         self.datapaths = {}
         self.links = []
-        self.topology_lock = threading.Lock()
+        self.topology_lock = hub.Semaphore(1)
         
         # Predefined link costs from topology (delay in ms)
         self.predefined_costs = {
